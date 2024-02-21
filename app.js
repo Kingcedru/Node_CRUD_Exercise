@@ -28,6 +28,11 @@ app.post("/items", (req, res) => {
   res.json(item);
 });
 
+app.get("/items/:id", async (req, res) => {
+  const item = await Items.findById(req.params.id);
+  res.json(item);
+});
+
 app.listen(3000, () => {
   console.log("listening");
 });
