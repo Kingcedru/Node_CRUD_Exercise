@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 app.get("/items", async (req, res) => {
   const items = await Items.find();
-  res.json(items);
+  res.json(items).status(200);
 });
 
 app.post("/items", (req, res) => {
@@ -30,6 +30,13 @@ app.post("/items", (req, res) => {
 
 app.get("/items/:id", async (req, res) => {
   const item = await Items.findById(req.params.id);
+  res.json(item);
+});
+
+app.put("/items/:id", async (req, res) => {
+  const item = await Items.findById(req.params.id);
+  item.name = req.body.name;
+  item.save();
   res.json(item);
 });
 
