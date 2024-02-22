@@ -16,6 +16,11 @@ app.use(bodyParser.json());
 
 app.get("/items", async (req, res) => {
   const items = await Items.find();
+  if (!items) {
+    const error = new Error("Not Found");
+    error.status = 404;
+    throw error;
+  }
   res.json(items).status(200);
 });
 
@@ -35,15 +40,28 @@ app.get("/items/:id", async (req, res) => {
 
 app.put("/items/:id", async (req, res) => {
   const item = await Items.findById(req.params.id);
+  if (!item) {
+    const error = new Error("Not Found");
+    error.status = 404;
+    throw error;
+  }
   item.name = req.body.name;
   item.save();
-  res.json(item);
+  res.json(item).status(200);
 });
 
 app.delete("/items/:id", async (req, res) => {
   const deleted = await Items.findByIdAndDelete(req.params.id);
   res.json({ deleted });
 });
+
+// app.use((err, req, res, next) => {
+//   res.status(err.status || 500).json({
+//     error: {
+//       message: err.message || "Internal Server Error",
+//     },
+//   });
+// });
 
 app.listen(3000, () => {
   console.log("listening");
