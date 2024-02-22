@@ -33,6 +33,11 @@ app.get("/items/:id", async (req, res) => {
   res.json(item);
 });
 
+app.delete("/items/:id", async (req, res) => {
+  const deleted = await Items.findByIdAndDelete(req.params.id);
+  res.json({ deleted });
+});
+
 app.listen(3000, () => {
   console.log("listening");
 });
